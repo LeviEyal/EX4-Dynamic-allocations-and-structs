@@ -6,8 +6,7 @@
 #define NUM_LETTERS 26
 #define WORD 30
 
-typedef struct Node
-{
+typedef struct Node{
     char letter;
     int ends;
     struct Node* children[NUM_LETTERS];
@@ -52,12 +51,12 @@ void printTrie(Node* root){
 
 void printTrie_r(Node* root){
     if(root == NULL) return;
-    if(root->ends){
-        printf("%s\t%d\n", root->word, root->ends);
-    }
     for (int i = NUM_LETTERS-1 ; i >= 0; i--){
         printTrie_r(root->children[i]);
     }  
+    if(root->ends){
+        printf("%s\t%d\n", root->word, root->ends);
+    }
 }
 
 void freeTrie(Node* root){
@@ -77,11 +76,13 @@ int main(int argc, char const *argv[])
     char c;
     int i = 0;
     char* str = (char*)malloc(WORD);
-    while((c = getchar()) != '\n' && c != EOF)
+    while((c = getchar()) != EOF)
     {
         if(isspace(c)){
             str[i] = 0;
             addWord(root, str);
+            if(c == '\n')
+                break;
             i=0;
             str = (char*)malloc(WORD);
             if(str == NULL){
