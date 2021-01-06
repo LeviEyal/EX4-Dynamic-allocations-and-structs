@@ -65,7 +65,7 @@ void printTrie_r(Node* root, char *str){
     }  
     if(root->ends){
         str[root->pos + 1] = 0;
-        printf("%s\t%d\n", str, root->ends);
+        printf("%s %d\n", str, root->ends);
     }
 }
 //=============================== Free trie memory ====================================
