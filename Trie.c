@@ -50,7 +50,7 @@ void printTrie(Node* root, char *str){
     str[root->pos] = root->letter;
     if(root->ends){
         str[root->pos + 1] = 0;
-        printf("%s\t%d\n", str, root->ends);
+        printf("%s %d\n", str, root->ends);
     }
     for (int i = 0; i < NUM_LETTERS; i++){
         printTrie(root->children[i], str);
