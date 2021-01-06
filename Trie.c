@@ -57,7 +57,7 @@ void addWord(Node* root, char* s){
 // }
 
 //================================== Print trie ======================================
-void print_trie(Node* root, char *str){
+void printTrie(Node* root, char *str){
     if(root == NULL) return;
     str[root->pos] = root->letter;
     if(root->ends){
@@ -65,29 +65,21 @@ void print_trie(Node* root, char *str){
         printf("%s\t%d\n", str, root->ends);
     }
     for (int i = 0; i < NUM_LETTERS; i++){
-        print_trie(root->children[i], str);
+        printTrie(root->children[i], str);
     }  
-}
-void printTrie(Node* root){
-    char str[WORD];
-    print_trie(root, str);
 }
 
 //============================= Print trie reversed ==================================
-void print_trie_r(Node* root, char *str){
+void printTrie_r(Node* root, char *str){
     if(root == NULL) return;
     str[root->pos] = root->letter;
     for (int i = NUM_LETTERS-1 ; i >= 0; i--){
-        print_trie_r(root->children[i], str);
+        printTrie_r(root->children[i], str);
     }  
     if(root->ends){
         str[root->pos + 1] = 0;
         printf("%s\t%d\n", str, root->ends);
     }
-}
-void printTrie_r(Node* root){
-    char str[WORD];
-    print_trie_r(root, str);
 }
 
 //=============================== Free trie memory ====================================
@@ -124,9 +116,9 @@ int main(int argc, char const *argv[])
     }
 
     if(argc == 1)
-        printTrie(root);
+        printTrie(root, str);
     else if(argc == 2 && strcmp(argv[1],"r")==0)
-        printTrie_r(root);
+        printTrie_r(root, str);
 
     freeTrie(root);
     return 0;
