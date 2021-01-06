@@ -11,7 +11,6 @@
 #include <ctype.h>
 
 #define NUM_LETTERS 26
-#define WORD 30
 
 typedef struct Node{
     char letter;
@@ -23,14 +22,10 @@ typedef struct Node{
 //=============================== Adding new Node ====================================
 Node* newNode(char c){
     Node* p = (Node*)malloc(sizeof(Node));
-    if(p == NULL){
-        printf("ERROR");
-        exit(1);
-    }
+    if(p == NULL) exit(1);
     p->letter = c;
     return p;
 }
-
 //=============================== Adding new word ====================================
 void addWord(Node* root, char* s){
     int i = -1;
@@ -49,13 +44,6 @@ void addWord(Node* root, char* s){
         }
     }
 }
-
-//========================= Searching for word in the trie ===========================
-
-// int searchWord(char* s){
-
-// }
-
 //================================== Print trie ======================================
 void printTrie(Node* root, char *str){
     if(root == NULL) return;
@@ -68,7 +56,6 @@ void printTrie(Node* root, char *str){
         printTrie(root->children[i], str);
     }  
 }
-
 //============================= Print trie reversed ==================================
 void printTrie_r(Node* root, char *str){
     if(root == NULL) return;
@@ -81,7 +68,6 @@ void printTrie_r(Node* root, char *str){
         printf("%s\t%d\n", str, root->ends);
     }
 }
-
 //=============================== Free trie memory ====================================
 void freeTrie(Node* root){
     if(root == NULL) return;
@@ -90,26 +76,26 @@ void freeTrie(Node* root){
     }
     free(root);
 }
-
 //===================================== MAIN ==========================================
 int main(int argc, char const *argv[])
 {
     Node* root = newNode(0);
-    char c;
     int i = 0;
-    char str[WORD];
+    char *str = (char*)malloc(1);
     while(1)
     {
-        c = getchar();
+        char c = getchar();
         if(isspace(c) || c == EOF){
+            str = realloc(str, i+1);
             str[i] = 0;
             addWord(root, str);
-            if(c == '\n' || c == EOF)
-                break;
             i=0;
+
+            if(c == EOF) break;
         }
         else if(isalpha(c)){
             c = tolower(c);
+            str = realloc(str, i+1);
             str[i] = c;
             i++;
         }
@@ -120,6 +106,7 @@ int main(int argc, char const *argv[])
     else if(argc == 2 && strcmp(argv[1],"r")==0)
         printTrie_r(root, str);
 
+    free(str);
     freeTrie(root);
     return 0;
 }
