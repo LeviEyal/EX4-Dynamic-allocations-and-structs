@@ -22,17 +22,20 @@ typedef struct Node{
 //=============================== Adding new Node ====================================
 Node* newNode(char c){
     Node* p = (Node*)malloc(sizeof(Node));
-    if(p == NULL) exit(1);
-    p->letter = c;
+    if(p != NULL)
+        p->letter = c;
     return p;
 }
 //=============================== Adding new word ====================================
-void addWord(Node* root, char* s){
+int addWord(Node* root, char* s){
     int i = -1;
     while(*s){
         char current = tolower(*s);
+        Node* p = newNode(current);
+        if(p == NULL)
+            return 0;
         if(root->children[current-'a'] == NULL){
-            root->children[current-'a'] = newNode(current);
+            root->children[current-'a'] = p;
             root->pos = i;
         }
         root = root->children[current-'a'];
@@ -43,6 +46,7 @@ void addWord(Node* root, char* s){
             root->pos = i;
         }
     }
+    return 1;
 }
 //================================== Print trie ======================================
 void printTrie(Node* root, char *str){
@@ -80,15 +84,27 @@ void freeTrie(Node* root){
 int main(int argc, char const *argv[])
 {
     Node* root = newNode(0);
+    if(root == NULL) exit(1);
     int i = 0;
     char *str = (char*)malloc(1);
+    if(str == NULL){
+        freeTrie(root);
+        exit(1);
+    }
     while(1)
     {
         char c = getchar();
         if(isspace(c) || c == EOF){
             str = realloc(str, i+1);
+            if(str == NULL){
+                freeTrie(root);
+                exit(1);
+            }
             str[i] = 0;
-            addWord(root, str);
+            if(addWord(root, str) == 0){
+                freeTrie(root);
+                exit(1);
+            }
             i=0;
 
             if(c == EOF) break;
@@ -96,15 +112,21 @@ int main(int argc, char const *argv[])
         else if(isalpha(c)){
             c = tolower(c);
             str = realloc(str, i+1);
+            if(str == NULL){
+                freeTrie(root);
+                exit(1);
+            }
             str[i] = c;
             i++;
         }
     }
 
-    if(argc == 1)
+    if(argc == 1){
         printTrie(root, str);
-    else if(argc == 2 && strcmp(argv[1],"r")==0)
+    }
+    else if(argc == 2 && strcmp(argv[1],"r")==0){
         printTrie_r(root, str);
+    }
 
     free(str);
     freeTrie(root);
